@@ -9,15 +9,7 @@ instance Seq [] where
 
     lengthS = length
 
-    -- nthS = (!!) -- creo que esta es 100% valida asi lo hacia Damian
-
-    -- creo que esta es la unica forma de mostrar error que no modifique la signatura de la funcion
-    -- pero es la misma forma que usa aldana y me da miedo
-    -- supongo que podemos hacerlo no exhaustivo pero en el otro tp lo preguntaron
-    nthS [] _ = error "No puede accederse a un elemento de una lista vacia"
-    nthS (x:_) 0 = x
-    nthS (_:xs) n = nthS xs (n - 1)
-
+    nthS = (!!)
 
     -- copiada de Damian medio chad que use la lambda function
     tabulateS f n = aux (\x -> f (n-x)) n
