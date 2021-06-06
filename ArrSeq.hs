@@ -20,7 +20,7 @@ instance Seq A.Arr where
     --appendS    :: s a -> s a -> s a
     takeS seq n = A.subArray 0 n seq
 
-    dropS seq n = A.subArray (A.length - n) n seq
+    dropS seq n = A.subArray n (A.length - n) seq
 
     --showtS     :: s a -> TreeView a (s a)
     --showlS     :: s a -> ListView a (s a)
