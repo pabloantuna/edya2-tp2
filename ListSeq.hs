@@ -10,25 +10,16 @@ instance Seq [] where
     lengthS = length
 
     nthS = (!!)
-
-    -- copiada de Damian medio chad que use la lambda function
-    tabulateS f n = aux (\x -> f (n-x)) n
+    
+    -- tabulateS f n = mapS f [0..n]
+    tabulateS f n = fhasta n
                     where
-                        aux _ 0 = emptyS 
-                        aux f n = let
-                                    (x, xs) = f n ||| aux f (n-1)
+                        fhasta 0 = emptyS 
+                        fhasta m = let
+                                    (x, xs) = f (n-m) ||| fhasta (m-1)
                                   in
                                     x:xs
-
-    -- no copiada pero resulta que aldana la tiene EXACTAMENTE igual y me da miedo que crean que lo copiamos
-    -- tabulateS f n = aux f n 0 
-    --                 where
-    --                     aux _ 0 _ = emptyS
-    --                     aux f n i = let 
-    --                                   (x, xs) = f i ||| aux f (n-1) (i+1)
-    --                                 in
-    --                                     x:xs
-
+                                    
     --- mapS = map -- idk tal vez no se como trabaja internamente map como para saber si optimiza ese pararelismo que quieren
 
     mapS _ [] = emptyS 
@@ -44,10 +35,7 @@ instance Seq [] where
                       in
                         if y then x:ys else ys
 
-    -- appendS = (++)
-    appendS xs [] = xs
-    appendS [] ys = ys
-    appendS (x:xs) ys = x : appendS xs ys
+    appendS = (++)
 
     takeS xs n = take n xs
 
@@ -64,10 +52,7 @@ instance Seq [] where
     showlS [] = NIL
     showlS (x:xs) = CONS x xs
 
-
-    -- joinS = concat creo?
-    joinS [] = []
-    joinS (x:xs) = appendS x (joinS xs)
+    joinS = concat
 
     --reduceS
     --scanS
