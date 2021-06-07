@@ -1,34 +1,44 @@
 module ArrSeq where
-import Seq
-import Par
-import qualified Arr as A
+
 import Arr ((!))
+import qualified Arr as A
+import Par
+import Seq
 
 instance Seq A.Arr where
-    emptyS = A.empty
+  emptyS = A.empty
 
-    singletonS x = fromList [x]
+  singletonS x = fromList [x]
 
-    lengthS = A.length
+  lengthS = A.length
 
-    nthS = (!)
+  nthS = (!)
 
-    tabulateS = A.tabulate
+  tabulateS = A.tabulate
 
-    --mapS       :: (a -> b) -> s a -> s b 
-    --filterS    :: (a -> Bool) -> s a -> s a 
-    --appendS    :: s a -> s a -> s a
+  --mapS       :: (a -> b) -> s a -> s b
+  --filterS    :: (a -> Bool) -> s a -> s a
 
-    takeS seq n = A.subArray 0 (min n (lengthS seq)) seq
+  appendS xs ys = tabulateS aux (largoXS + largoYS)
+    where
+      largoXS = lengthS xs
+      largoYS = lengthS ys
+      aux n
+        | n < largoXS = nthS xs n
+        | otherwise = nthS ys (n - largoXS)
 
-    dropS seq n = A.subArray n (A.length seq - n) seq -- esto ta bien si n < length :)
+  takeS seq n = A.subArray 0 (min n (lengthS seq)) seq
 
-    --showtS     :: s a -> TreeView a (s a)
-    --showlS     :: s a -> ListView a (s a)
+  dropS seq n | n > largo = emptyS
+              | otherwise = A.subArray n (largo - n) seq
+    where largo = lengthS seq
 
-    joinS = A.flatten
+  --showtS     :: s a -> TreeView a (s a)
+  --showlS     :: s a -> ListView a (s a)
 
-    --reduceS    :: (a -> a -> a) -> a -> s a -> a
-    --scanS      :: (a -> a -> a) -> a -> s a -> (s a, a)
+  joinS = A.flatten
 
-    fromList = A.fromList
+  --reduceS    :: (a -> a -> a) -> a -> s a -> a
+  --scanS      :: (a -> a -> a) -> a -> s a -> (s a, a)
+
+  fromList = A.fromList
