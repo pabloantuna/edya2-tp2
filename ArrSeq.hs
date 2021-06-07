@@ -41,13 +41,14 @@ instance Seq A.Arr where
     | largo == 1 = ELT (nthS seq 0)
     | otherwise =
       let mitad = largo `div` 2
-       in NODE (takeS seq mitad) (dropS seq mitad)
+          (left, right) = takeS seq mitad ||| dropS seq mitad
+       in NODE left right
     where
       largo = lengthS seq
 
   showlS seq
     | largo == 0 = NIL
-    | otherwise = CONS (nthS seq 0) (A.subArray 1 (largo - 1) seq)
+    | otherwise = CONS (nthS seq 0) (dropS seq 1)
     where
       largo = lengthS seq
 
