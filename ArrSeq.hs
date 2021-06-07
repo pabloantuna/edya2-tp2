@@ -18,7 +18,7 @@ instance Seq A.Arr where
 
   mapS f seq = tabulateS (f . nthS seq) (lengthS seq)
 
-  --filterS    :: (a -> Bool) -> s a -> s a
+  filterS f seq = joinS (mapS (\x -> if f x then singletonS x else emptyS) seq)
 
   appendS xs ys = tabulateS aux (largoXS + largoYS)
     where
