@@ -17,6 +17,7 @@ instance Seq A.Arr where
   tabulateS = A.tabulate
 
   mapS f seq = tabulateS (f . nthS seq) (lengthS seq)
+
   --filterS    :: (a -> Bool) -> s a -> s a
 
   appendS xs ys = tabulateS aux (largoXS + largoYS)
@@ -29,12 +30,26 @@ instance Seq A.Arr where
 
   takeS seq n = A.subArray 0 (min n (lengthS seq)) seq
 
-  dropS seq n | n > largo = emptyS
-              | otherwise = A.subArray n (largo - n) seq
-    where largo = lengthS seq
+  dropS seq n
+    | n > largo = emptyS
+    | otherwise = A.subArray n (largo - n) seq
+    where
+      largo = lengthS seq
 
-  --showtS     :: s a -> TreeView a (s a)
-  --showlS     :: s a -> ListView a (s a)
+  showtS seq
+    | largo == 0 = EMPTY
+    | largo == 1 = ELT (nthS seq 0)
+    | otherwise =
+      let mitad = largo `div` 2
+       in NODE (takeS seq mitad) (dropS seq mitad)
+    where
+      largo = lengthS seq
+
+  showlS seq
+    | largo == 0 = NIL
+    | otherwise = CONS (nthS seq 0) (A.subArray 1 (largo - 1) seq)
+    where
+      largo = lengthS seq
 
   joinS = A.flatten
 
