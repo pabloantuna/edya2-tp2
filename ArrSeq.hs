@@ -16,8 +16,7 @@ instance Seq A.Arr where
 
   tabulateS = A.tabulate
 
-  --mapS f seq = tabulateS (f . nthS seq) (lengthS seq)
-  mapS f seq = tabulateS (\x -> f (nthS seq x)) (lengthS seq)
+  mapS f seq = tabulateS (f . nthS seq) (lengthS seq)
   --filterS    :: (a -> Bool) -> s a -> s a
 
   appendS xs ys = tabulateS aux (largoXS + largoYS)
