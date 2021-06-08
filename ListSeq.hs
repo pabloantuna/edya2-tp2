@@ -65,9 +65,9 @@ instance Seq [] where
       contraer [] = []
       contraer [x1] = [x1]
       contraer (x1:x2:xs) = let (y, ys) = f x1 x2 ||| contraer xs in y:ys
-      expandir l s'@([], t) = s'
-      expandir [] ([x1], t) = ([], x1)
-      expandir [s1] ([x1], t) = ([x1], f s1 x1)
+      expandir _ s'@([], _) = s'
+      expandir [] ([x1], _) = ([], x1)
+      expandir [s1] ([x1], _) = ([x1], f s1 x1)
       expandir (s1:_:ss) (x1:xs, t) = let (interp, (exp, red)) = f s1 x1 ||| expandir ss (xs, t) in (x1 : interp : exp, red)
 
   fromList = id
