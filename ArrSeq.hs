@@ -54,7 +54,29 @@ instance Seq A.Arr where
 
   joinS = A.flatten
 
-  --reduceS    :: (a -> a -> a) -> a -> s a -> a
-  --scanS      :: (a -> a -> a) -> a -> s a -> (s a, a)
+  --reduceS
+  reduceS f b seq
+    | largo == 0 = b
+    | otherwise = f b (reduceS' seq)
+    where
+      largo = lengthS seq
+      reduceS' seq
+        | largo == 1 = nthS seq 0
+        | otherwise = reduceS' (contraer seq)
+        where
+          largo = lengthS seq
+      contraer seq
+        | largo < 2 = seq
+        | otherwise = tabulateS (\x -> if (2 * x + 1) == largo then nthS seq (2 * x) else f (nthS seq (2 * x)) (nthS seq (2 * x + 1))) mitad
+        where
+          largo = lengthS seq
+          mitad = ceiling (fromIntegral largo / 2)
+
+  --scanS
+  scanS f b seq
+    | largo == 0 = (emptyS, b)
+    | largo == 1 = (singletonS b, f b (nthS seq 0))
+    where
+      largo = lengthS seq
 
   fromList = A.fromList
