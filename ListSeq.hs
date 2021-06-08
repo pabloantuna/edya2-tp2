@@ -58,16 +58,16 @@ instance Seq [] where
       contraer (x1:x2:xs) = let (y, ys) = f x1 x2 ||| contraer xs in y:ys
 
   --scanS
-  scanS f b [] = ([b], b)
-  scanS f b [s1] = ([b, f b s1], s1)
+  scanS _ b [] = ([], b)
+  scanS f b [s1] = ([b], f b s1)
   scanS f b s = expandir s (scanS f b (contraer s))
     where
       contraer [] = []
       contraer [x1] = [x1]
       contraer (x1:x2:xs) = let (y, ys) = f x1 x2 ||| contraer xs in y:ys
       expandir _ s'@([], _) = s'
-      expandir [] ([x1], _) = ([], x1)
-      expandir [s1] ([x1], _) = ([x1], f s1 x1)
-      expandir (s1:_:ss) (x1:xs, t) = let (interp, (exp, red)) = f s1 x1 ||| expandir ss (xs, t) in (x1 : interp : exp, red)
+      expandir [] (_, t) = ([], t)
+      expandir [s1] s' = s'
+      expandir (s1:_:ss) (x1:xs, t) = let (interp, (exp, red)) = f x1 s1 ||| expandir ss (xs, t) in (x1 : interp : exp, red)
 
   fromList = id
