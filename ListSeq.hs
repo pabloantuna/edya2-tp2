@@ -29,7 +29,9 @@ instance Seq [] where
     let (y, ys) = f x ||| filterS f xs
      in if y then x : ys else ys
 
-  appendS = (++)
+  appendS xs [] = xs
+  appendS [] ys = ys
+  appendS (x:xs) ys = x : appendS xs ys
 
   takeS xs n = take n xs
 
