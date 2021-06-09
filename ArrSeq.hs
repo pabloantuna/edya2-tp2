@@ -73,10 +73,20 @@ instance Seq A.Arr where
           mitad = ceiling (fromIntegral largo / 2)
 
   --scanS
-  scanS f b seq
+  scanS f b s
     | largo == 0 = (emptyS, b)
-    | largo == 1 = (singletonS b, f b (nthS seq 0))
+    | largo == 1 = (singletonS b, f b (nthS s 0))
+    | otherwise = expandir s (scanS f b (contraer s))
     where
-      largo = lengthS seq
+      largo = lengthS s
+      contraer seq
+        | largo < 2 = seq
+        | otherwise = tabulateS (\x -> if (2 * x + 1) == largo then nthS seq (2 * x) else f (nthS seq (2 * x)) (nthS seq (2 * x + 1))) mitad
+        where
+          largo = lengthS seq
+          mitad = ceiling (fromIntegral largo / 2)
+      expandir s (s', t) = (tabulateS (\x -> if even x then nthS s' (x `div` 2) else f (nthS s' (x `div` 2)) (nthS s (x - 1))) largo, t)
+        where
+          largo = lengthS s
 
   fromList = A.fromList
